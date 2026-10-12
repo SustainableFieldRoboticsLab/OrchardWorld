@@ -1,0 +1,202 @@
+{
+ "job": {
+  "id": "shift__fruit_sparse__detect_and_pick__900201",
+  "group": "shift",
+  "cond": "fruit_sparse",
+  "controller": "detect_and_pick",
+  "seed": 900201,
+  "foliage": 0.8,
+  "apples": 20,
+  "light": "nominal"
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 0.36666666666666664,
+  "decisions": 30,
+  "targets": 29,
+  "pick_attempts": 26,
+  "executed": 26,
+  "harvested": 11.0,
+  "detached": 22.0,
+  "contacts": 12.0,
+  "damages": 9.0,
+  "skips": 4,
+  "repositions": 0,
+  "return_sum": -1.6618333333333335,
+  "branches_broken_total": 26,
+  "harvest_success": 42.30769230769231,
+  "detachment": 84.61538461538461,
+  "contact_rate": 46.15384615384615,
+  "damage_rate": 34.61538461538461,
+  "actions_per_fruit": 2.3636363636363638,
+  "throughput": 1.8750000000000002,
+  "safe_return": -0.2832670454545455,
+  "skip_rate": 13.333333333333334,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 0.6875
+ },
+ "summary": {
+  "spec": {
+   "seed": 900201,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 20,
+   "light_dir": [
+    -0.6487571421367958,
+    -0.20070668328674413,
+    -0.7340510866489689
+   ],
+   "light_el": 47.227094871147834,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "nan",
+  "build_s": 13.66,
+  "wall_s": 180.33,
+  "sim_frames": 1320,
+  "sim_s": 22.0,
+  "fps": 7.31989191352749,
+  "env_steps": 21120,
+  "n_records": 30,
+  "per_env": [
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 4,
+    "branches_broken": 4,
+    "apples_detached": 3
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 2,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 2,
+    "apples_detached": 1
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 3
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 1,
+    "apples_detached": 0
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 3
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 2,
+    "apples_detached": 2
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 3
+   },
+   {
+    "targets": 2,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 2,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 2,
+    "apples_detached": 2
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 4,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 6,
+    "apples_detached": 4
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 0,
+    "apples_detached": 1
+   }
+  ],
+  "bodies": 4496,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 106.19,
+   "camera": 9.74,
+   "probe": 6.01,
+   "control": 14.67
+  }
+ }
+}

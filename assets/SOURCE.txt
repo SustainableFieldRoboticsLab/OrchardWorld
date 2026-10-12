@@ -1,0 +1,3 @@
+franka_emika_panda: copied from github.com/newton-physics/newton-assets (commit 8e8df07d),
+the asset newton.utils.download_asset("franka_emika_panda") fetches. Only the FR3 arm and
+white-hand meshes used by urdf/fr3_franka_hand.urdf are included. License: see LICENSE.

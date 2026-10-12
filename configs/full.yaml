@@ -1,0 +1,38 @@
+collect:
+  hours: 4.5
+  workers_per_gpu: 4
+  num_envs: 16
+  frames: 3600
+  seed_base: 100000
+  foliage: [0.2, 0.6, 1.0, 1.4]
+  apples: [20, 35, 50]
+  max_decisions: 4
+  action_probs: [0.2, 0.2, 0.2, 0.15, 0.15, 0.1]
+
+train:
+  variants: [full, rgbd, rgb, rgb_state, no_action]
+  seeds: [0, 1, 2]
+  epochs: 40
+  batch_size: 256
+  lr: 3.0e-4
+  weight_decay: 0.05
+  width: 256
+  runs_per_gpu: 2
+  max_minutes: 35
+
+eval:
+  hours: 2.5
+  workers_per_gpu: 3
+  num_envs: 16
+  frames: 3600
+  seed_base: 900000
+  main_seeds: 8
+  sweep_seeds: 4
+  keep_obs: 16
+
+phase2:
+  train:
+    variants: [vjepa, tdmpc]
+    seeds: [0, 1, 2]
+  eval:
+    hours: 1.0

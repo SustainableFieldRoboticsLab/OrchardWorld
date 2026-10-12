@@ -1,0 +1,25 @@
+{
+ "a": [
+  0.9498973488807678,
+  0.8533352613449097,
+  1.0150362253189087,
+  0.9449037909507751,
+  1.0276148319244385
+ ],
+ "b": [
+  -0.1077592521905899,
+  -1.6070135831832886,
+  -0.13302859663963318,
+  -0.793123722076416,
+  -1.0812219381332397
+ ],
+ "heads": [
+  "detach",
+  "success",
+  "contact",
+  "damage",
+  "visible_after"
+ ],
+ "fitted_on": "validation trees",
+ "method": "per-head Platt scaling on logit of the (ensemble-mean) probability"
+}
