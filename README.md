@@ -4,7 +4,7 @@ Physics-grounded, action-conditioned world models for apple-harvesting robots in
 
 This repository contains the code, configurations, run logs and generated results of the study
 *OrchardWorld: Physics-Grounded Action-Conditioned World Models for Apple-Harvesting Robots in
-Digital Orchards* (Dr. R. Sapkota, Dr. K. I. Roumeliotis). All results are from simulation only.
+Digital Orchards* (R. Sapkota, Dr. K. I. Roumeliotis). All results are from simulation only, and we aim to scale up this project to real-world commercial orchard scene.
 
 ## What the code does
 
