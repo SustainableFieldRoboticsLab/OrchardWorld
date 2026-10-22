@@ -1,0 +1,24 @@
+{
+ "combo": {
+  "status": "ok",
+  "decisions": 10,
+  "picks": 3,
+  "harvested": 2.0,
+  "noise_counts": {
+   "obs": 13,
+   "dropped": 0,
+   "grasp_attempts": 3
+  }
+ },
+ "servo20": {
+  "status": "ok",
+  "decisions": 9,
+  "picks": 1,
+  "harvested": 1.0,
+  "noise_counts": {
+   "obs": 0,
+   "dropped": 0,
+   "grasp_attempts": 1
+  }
+ }
+}

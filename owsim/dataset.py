@@ -21,6 +21,7 @@ def build(out_dir=None, shard_dirs=None):
     if not files:
         raise SystemExit(f"no shards in {shard_dirs}")
     out_dir = out_dir or rdir("dataset")
+
     rows = []
     shapes = {}
     total = 0
@@ -61,6 +62,7 @@ def build(out_dir=None, shard_dirs=None):
         good.append((f, n, meta))
         total += n
     table = pd.concat(rows, ignore_index=True)
+
     mm = {k: np.lib.format.open_memmap(os.path.join(out_dir, f"{k}.npy"), mode="w+",
                                        dtype=dt, shape=(total,) + sh)
           for k, (sh, dt) in shapes.items()}
@@ -72,6 +74,7 @@ def build(out_dir=None, shard_dirs=None):
         o += n
     for k in mm:
         mm[k].flush()
+
     key = list(zip(table["shard"], table["env"], table["target_uid"], table["dec_idx"]))
     pos = {k: i for i, k in enumerate(key)}
     table["next_idx"] = [pos.get((s, e, t, di + 1), -1) for (s, e, t, di) in key]

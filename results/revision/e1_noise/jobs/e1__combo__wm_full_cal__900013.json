@@ -1,0 +1,210 @@
+{
+ "job": {
+  "id": "e1__combo__wm_full_cal__900013",
+  "cell": "combo",
+  "controller": "wm_full_cal",
+  "seed": 900013,
+  "sigma_in": 0.01,
+  "p_drop": 0.1,
+  "sigma_servo": 0.01,
+  "foliage": 0.8,
+  "apples": 35
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 1.0,
+  "decisions": 62,
+  "targets": 63,
+  "pick_attempts": 18,
+  "executed": 18,
+  "harvested": 8.0,
+  "detached": 17.0,
+  "contacts": 8.0,
+  "damages": 4.0,
+  "skips": 44,
+  "repositions": 0,
+  "return_sum": 1.5703333333333338,
+  "branches_broken_total": 50,
+  "harvest_success": 44.44444444444444,
+  "detachment": 94.44444444444444,
+  "contact_rate": 44.44444444444444,
+  "damage_rate": 22.22222222222222,
+  "actions_per_fruit": 2.25,
+  "throughput": 0.5,
+  "safe_return": 0.09814583333333336,
+  "skip_rate": 70.96774193548387,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 0.5
+ },
+ "summary": {
+  "spec": {
+   "seed": 900013,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 35,
+   "light_dir": [
+    0.6222178357114855,
+    -0.4332792303189823,
+    -0.6520077250283965
+   ],
+   "light_el": 40.69314732866855,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "ok",
+  "build_s": 13.19,
+  "wall_s": 374.4,
+  "sim_frames": 3600,
+  "sim_s": 60.0,
+  "fps": 9.615340655445605,
+  "env_steps": 57600,
+  "n_records": 62,
+  "per_env": [
+   {
+    "targets": 11,
+    "decisions": 11,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 7,
+    "apples_detached": 9
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 1
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 3,
+    "apples_detached": 5
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 2,
+    "apples_detached": 2
+   },
+   {
+    "targets": 5,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 4,
+    "apples_detached": 6
+   },
+   {
+    "targets": 7,
+    "decisions": 8,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 3,
+    "apples_detached": 5
+   },
+   {
+    "targets": 5,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 3,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 4,
+    "branches_broken": 5,
+    "apples_detached": 9
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 5,
+    "apples_detached": 5
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 6,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 4
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 6,
+    "decisions": 6,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 13,
+    "apples_detached": 12
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 1
+   }
+  ],
+  "bodies": 4480,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 84.41,
+   "camera": 7.85,
+   "probe": 3.8,
+   "control": 7.94
+  },
+  "policy_latency_ms": 35.600559785962105,
+  "noise_counts": {
+   "obs": 79,
+   "dropped": 4,
+   "grasp_attempts": 17
+  },
+  "theta_used": 0.0
+ }
+}

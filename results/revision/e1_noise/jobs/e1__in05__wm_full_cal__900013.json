@@ -1,0 +1,210 @@
+{
+ "job": {
+  "id": "e1__in05__wm_full_cal__900013",
+  "cell": "in05",
+  "controller": "wm_full_cal",
+  "seed": 900013,
+  "sigma_in": 0.005,
+  "p_drop": 0.0,
+  "sigma_servo": 0.0,
+  "foliage": 0.8,
+  "apples": 35
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 1.0,
+  "decisions": 50,
+  "targets": 50,
+  "pick_attempts": 13,
+  "executed": 13,
+  "harvested": 8.0,
+  "detached": 12.0,
+  "contacts": 4.0,
+  "damages": 1.0,
+  "skips": 37,
+  "repositions": 0,
+  "return_sum": 5.523166666666666,
+  "branches_broken_total": 42,
+  "harvest_success": 61.53846153846154,
+  "detachment": 92.3076923076923,
+  "contact_rate": 30.76923076923077,
+  "damage_rate": 7.6923076923076925,
+  "actions_per_fruit": 1.625,
+  "throughput": 0.5,
+  "safe_return": 0.3451979166666666,
+  "skip_rate": 74.0,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 0.5
+ },
+ "summary": {
+  "spec": {
+   "seed": 900013,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 35,
+   "light_dir": [
+    0.6222178357114855,
+    -0.4332792303189823,
+    -0.6520077250283965
+   ],
+   "light_el": 40.69314732866855,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "ok",
+  "build_s": 13.42,
+  "wall_s": 371.62,
+  "sim_frames": 3600,
+  "sim_s": 60.0,
+  "fps": 9.687326816995279,
+  "env_steps": 57600,
+  "n_records": 50,
+  "per_env": [
+   {
+    "targets": 6,
+    "decisions": 6,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 5,
+    "apples_detached": 6
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 3
+   },
+   {
+    "targets": 5,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 5,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 3,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 4,
+    "apples_detached": 5
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 1
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 6,
+    "apples_detached": 5
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 4,
+    "branches_broken": 5,
+    "apples_detached": 6
+   },
+   {
+    "targets": 5,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 6,
+    "apples_detached": 8
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 3,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 4,
+    "branches_broken": 2,
+    "apples_detached": 3
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 6,
+    "apples_detached": 7
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   }
+  ],
+  "bodies": 4480,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 84.19,
+   "camera": 8.15,
+   "probe": 3.05,
+   "control": 7.84
+  },
+  "policy_latency_ms": 47.05881420522928,
+  "noise_counts": {
+   "obs": 63,
+   "dropped": 0,
+   "grasp_attempts": 0
+  },
+  "theta_used": 0.0
+ }
+}

@@ -53,4 +53,4 @@ stage train   python -m owsim.launch train --config "$CFG"
 stage offline python -m owsim.eval_offline --device cuda
 stage control python -m owsim.launch eval --config "$CFG"
 echo "finished $(date +%s)" > "$ST/current.txt"
-say "ALL DONE. Results: $OW_RESULTS"
+say "ALL DONE"

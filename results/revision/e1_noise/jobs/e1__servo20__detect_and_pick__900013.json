@@ -1,0 +1,209 @@
+{
+ "job": {
+  "id": "e1__servo20__detect_and_pick__900013",
+  "cell": "servo20",
+  "controller": "detect_and_pick",
+  "seed": 900013,
+  "sigma_in": 0.0,
+  "p_drop": 0.0,
+  "sigma_servo": 0.02,
+  "foliage": 0.8,
+  "apples": 35
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 1.0,
+  "decisions": 58,
+  "targets": 50,
+  "pick_attempts": 46,
+  "executed": 46,
+  "harvested": 20.0,
+  "detached": 34.0,
+  "contacts": 27.0,
+  "damages": 15.0,
+  "skips": 12,
+  "repositions": 0,
+  "return_sum": -2.9054999999999986,
+  "branches_broken_total": 51,
+  "harvest_success": 43.47826086956522,
+  "detachment": 73.91304347826087,
+  "contact_rate": 58.69565217391305,
+  "damage_rate": 32.608695652173914,
+  "actions_per_fruit": 2.3,
+  "throughput": 1.25,
+  "safe_return": -0.18159374999999991,
+  "skip_rate": 20.689655172413794,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 1.25
+ },
+ "summary": {
+  "spec": {
+   "seed": 900013,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 35,
+   "light_dir": [
+    0.6222178357114855,
+    -0.4332792303189823,
+    -0.6520077250283965
+   ],
+   "light_el": 40.69314732866855,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "ok",
+  "build_s": 12.78,
+  "wall_s": 379.21,
+  "sim_frames": 3600,
+  "sim_s": 60.0,
+  "fps": 9.49351251045728,
+  "env_steps": 57600,
+  "n_records": 58,
+  "per_env": [
+   {
+    "targets": 6,
+    "decisions": 6,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 6,
+    "apples_detached": 10
+   },
+   {
+    "targets": 4,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 7,
+    "apples_detached": 6
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 0,
+    "apples_detached": 2
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 2,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 4,
+    "decisions": 6,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 4,
+    "apples_detached": 7
+   },
+   {
+    "targets": 5,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 4,
+    "apples_detached": 4
+   },
+   {
+    "targets": 3,
+    "decisions": 6,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 3,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 5,
+    "apples_detached": 6
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 2,
+    "phantom": 0,
+    "branches_broken": 3,
+    "apples_detached": 4
+   },
+   {
+    "targets": 5,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 11,
+    "apples_detached": 9
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 6
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 6,
+    "decisions": 6,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 5,
+    "apples_detached": 11
+   },
+   {
+    "targets": 5,
+    "decisions": 7,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 4,
+    "apples_detached": 9
+   }
+  ],
+  "bodies": 4480,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 81.04,
+   "camera": 8.04,
+   "probe": 5.67,
+   "control": 10.59
+  },
+  "noise_counts": {
+   "obs": 0,
+   "dropped": 0,
+   "grasp_attempts": 43
+  },
+  "theta_used": null
+ }
+}

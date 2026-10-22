@@ -172,11 +172,13 @@ def main():
         va_all = np.nonzero(split != "test")[0]
     log(f"test rows {len(te)}  val rows (incl. skip) {len(va_all)}")
     summary = {}
+
     Pb, rt = reactive_baseline(table, arrs, tr, te, log)
     mb = outcome_metrics(table.iloc[te], Pb)
     mb["runtime_ms"] = rt
     summary["reactive"] = dict(runs={"reactive": mb})
     np.savez_compressed(os.path.join(out, "preds_reactive.npz"), idx=te, P=Pb)
+
     for run_dir in sorted(glob.glob(os.path.join(RESULTS, "runs", "*_s*"))):
         name = os.path.basename(run_dir)
         if not os.path.exists(os.path.join(run_dir, "best.pt")):
@@ -196,6 +198,7 @@ def main():
         m["runtime_ms"] = latency_ms(model, meta, arrs, dev, vj=vj)
         del vj
         m["params_M"] = meta["params"] / 1e6
+
         Pv, Cv, Sv, _ = predict(model, meta, arrs, va_all, dev)
         Sv6 = np.concatenate([Sv, np.full((len(Sv), 1), -np.inf)], 1)
         grid = np.round(np.arange(-0.3, 0.41, 0.025), 3)

@@ -11,9 +11,12 @@ torch==2.13.0
 numpy>=1.26
 scipy>=1.11
 pandas>=2.0
+matplotlib>=3.7
 scikit-learn>=1.4
 pyyaml>=6.0
 pillow>=10.0
+tabulate>=0.9
+gitpython>=3.1
 
 transformers>=4.53
 huggingface_hub>=0.30

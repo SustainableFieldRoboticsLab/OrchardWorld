@@ -1,0 +1,209 @@
+{
+ "job": {
+  "id": "e1__servo10__detect_and_pick__900005",
+  "cell": "servo10",
+  "controller": "detect_and_pick",
+  "seed": 900005,
+  "sigma_in": 0.0,
+  "p_drop": 0.0,
+  "sigma_servo": 0.01,
+  "foliage": 0.8,
+  "apples": 35
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 1.0,
+  "decisions": 19,
+  "targets": 18,
+  "pick_attempts": 17,
+  "executed": 17,
+  "harvested": 6.0,
+  "detached": 15.0,
+  "contacts": 5.0,
+  "damages": 4.0,
+  "skips": 2,
+  "repositions": 0,
+  "return_sum": 0.3751666666666668,
+  "branches_broken_total": 13,
+  "harvest_success": 35.294117647058826,
+  "detachment": 88.23529411764706,
+  "contact_rate": 29.41176470588235,
+  "damage_rate": 23.529411764705884,
+  "actions_per_fruit": 2.8333333333333335,
+  "throughput": 0.375,
+  "safe_return": 0.023447916666666676,
+  "skip_rate": 10.526315789473685,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 0.375
+ },
+ "summary": {
+  "spec": {
+   "seed": 900005,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 35,
+   "light_dir": [
+    0.26082408878415153,
+    -0.5501366487523487,
+    -0.7932972093795944
+   ],
+   "light_el": 52.49471735398444,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "ok",
+  "build_s": 11.49,
+  "wall_s": 309.41,
+  "sim_frames": 3600,
+  "sim_s": 60.0,
+  "fps": 11.6350783118271,
+  "env_steps": 57600,
+  "n_records": 19,
+  "per_env": [
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 3
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 3,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 2,
+    "apples_detached": 4
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 0,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 0,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 3
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 1,
+    "apples_detached": 0
+   },
+   {
+    "targets": 1,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 0
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 4,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 3
+   }
+  ],
+  "bodies": 4064,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 70.64,
+   "camera": 6.84,
+   "probe": 2.24,
+   "control": 6.22
+  },
+  "noise_counts": {
+   "obs": 0,
+   "dropped": 0,
+   "grasp_attempts": 15
+  },
+  "theta_used": null
+ }
+}

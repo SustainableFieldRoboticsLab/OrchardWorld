@@ -36,3 +36,13 @@ phase2:
     seeds: [0]
   eval:
     hours: 0.15
+
+counterfactual:
+  collect:
+    hours: 0.15
+    workers_per_gpu: 1
+    num_envs: 4
+    frames: 2400
+    seed_base: 300000
+  train_seeds: [0]
+  eval_seeds: 1

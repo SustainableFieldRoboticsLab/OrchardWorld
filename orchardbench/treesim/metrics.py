@@ -1,9 +1,3 @@
-"""Run metrics: fps, pick/place success, throughput, forces, detection quality.
-
-Host-side and O(1) per frame; everything is accumulated in plain python and
-written as one JSON at the end (plus a human summary on stdout).
-"""
-
 from __future__ import annotations
 
 import json
@@ -20,21 +14,18 @@ class Metrics:
         self._fps = deque(maxlen=240)
         self.frames = 0
         self.counters: dict = {}
-        self.picks: list[dict] = []          # one record per attempted pick
+        self.picks: list[dict] = []
         self._open_pick: dict | None = None
         self.detection = dict(frames=0, true_positives=0, false_positives=0,
                               visible_candidates=0)
-        # canopy-zone census: how many reachable apples sit in each
-        # (vertical x radial) zone of THIS env's tree, so per-zone pick
-        # success can be normalised by the fruit actually present there.
+
+
         self.apple_census: dict = {}
 
-    SIM_FPS = 60.0        # nominal sim frame rate: event times are SIM time
+    SIM_FPS = 60.0
 
-    # -- per-frame ------------------------------------------------------------
+
     def frame(self, wall: bool = True):
-        """``wall=False`` advances sim time only (per-env metrics in multi-env
-        autonomy share one wall clock; only env 0 samples fps)."""
         if wall:
             now = time.time()
             if self._last is not None:
@@ -47,7 +38,7 @@ class Metrics:
     def count(self, name: str, inc: int = 1):
         self.counters[name] = self.counters.get(name, 0) + inc
 
-    # -- detection quality (called by the picker with ground-truth matching) --
+
     def detection_frame(self, tp: int, fp: int, candidates: int):
         d = self.detection
         d["frames"] += 1
@@ -56,12 +47,9 @@ class Metrics:
         d["visible_candidates"] += candidates
 
     def set_apple_census(self, census: dict):
-        """Record how many reachable apples live in each canopy zone (called
-        once at picker init).  ``census`` maps a zone label ("upper-outer",
-        ...) to a count."""
         self.apple_census = dict(census)
 
-    # -- pick lifecycle --------------------------------------------------------
+
     def pick_start(self, fruit_id: int, target, zone: str | None = None,
                    zone_v: str | None = None, zone_r: str | None = None):
         self._open_pick = dict(
@@ -98,12 +86,9 @@ class Metrics:
         self._open_pick = None
 
     def _t(self):
-        """Event timestamps in SIM seconds (frames / nominal fps), so cycle
-        times and throughput describe the simulated system, not the wall clock
-        of this particular GPU."""
         return round(self.frames / self.SIM_FPS, 3)
 
-    # -- reporting -------------------------------------------------------------
+
     def summary(self, sim=None) -> dict:
         fps = sorted(self._fps)
         att = len(self.picks)
@@ -122,10 +107,10 @@ class Metrics:
             fps_median=round(fps[len(fps) // 2], 1) if fps else None,
             picks_attempted=att,
             grasp_success=gr,
-            pick_success=de,                       # fruit detached from the stem
-            place_success=pl,                      # fruit ended up in the bucket
+            pick_success=de,
+            place_success=pl,
             total_success_rate=round(pl / att, 3) if att else None,
-            mean_cycle_time_s=round(sum(cyc) / len(cyc), 1) if cyc else None,   # SIM time
+            mean_cycle_time_s=round(sum(cyc) / len(cyc), 1) if cyc else None,
             throughput_fruit_per_min=round(60.0 * pl / sim_s, 2) if sim_s > 0 else None,
             max_pull_force_N=round(max((p["max_pull_N"] for p in self.picks),
                                        default=0.0), 2),
@@ -162,9 +147,6 @@ ZONES_R = ("inner", "outer")
 
 
 def zone_breakdown(picks: list, census: dict | None = None) -> dict:
-    """Per-canopy-zone pick outcomes for the paper's inner/outer x lower/
-    middle/upper success table.  Each entry: attempts, grasped, detached,
-    placed, and (if a census is given) the reachable apples present there."""
     out: dict = {}
     for p in picks:
         z = p.get("zone")
@@ -188,9 +170,6 @@ def zone_breakdown(picks: list, census: dict | None = None) -> dict:
 
 
 def combined_summary(mets: list, sim=None) -> dict:
-    """Merge per-env Metrics (multi-env autonomy: one robot per world) into a
-    stand-level summary: successes and counters sum, rates pool, throughput is
-    fruit per SIM minute across the whole stand."""
     m0 = mets[0]
     picks = [p for m in mets for p in m.picks]
     att = len(picks)
@@ -232,8 +211,6 @@ def combined_summary(mets: list, sim=None) -> dict:
 
 
 def save_combined(path: str | None, mets: list, sim=None) -> dict:
-    """Write one JSON for a multi-env run: stand-level summary + per-env
-    summaries + all pick records tagged by env."""
     for m in mets:
         if m._open_pick is not None:
             m.pick_end(False, "run ended")

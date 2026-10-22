@@ -16,7 +16,7 @@ SCALARS = ["env", "target_uid", "dec_idx", "action", "behavior_p", "skipped", "d
            "arm_apple_frames", "branches_broken", "collateral_drops", "fail_code",
            "reward", "start_frame", "end_frame"]
 PRIV = ["occlusion", "in_fov", "gt_z", "stem_strength"]
-OPTIONAL = []
+OPTIONAL = ["cf_group", "cf_branch"]
 
 _IK = None
 

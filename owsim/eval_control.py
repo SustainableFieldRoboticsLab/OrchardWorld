@@ -24,6 +24,7 @@ SHIFTS = {
     "trees_seen": dict(seen=True),
 }
 SWEEP_FOLIAGE = [0.2, 0.6, 1.0, 1.4]
+
 CONTROLLERS_P2_MAIN = ["wm_tdmpc", "wm_vjepa"]
 CONTROLLERS_P2_CORE = ["wm_vjepa"]
 

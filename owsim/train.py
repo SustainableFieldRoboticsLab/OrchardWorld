@@ -83,11 +83,13 @@ def compute_losses(model, D, idx, mean, std, pos_w, augment):
     l_bin = ens_bce(lb_all, yb, pos_w)
     m = torch.isfinite(yc)
     l_cont = F.smooth_l1_loss(lc.float()[m], yc[m]) if m.any() else lc.sum() * 0
+
     l_dep = F.l1_loss(model.future_depth(h1).float(), future_depth_target(D.T["post_g_dep"][idx]))
     with torch.no_grad():
         gp, cp, sp, vgp, vcp = D.obs(model, "post", idx, mean, std, False)
         hp = model.encode(gp, cp, sp, vgp, vcp)
     l_lat = (1 - F.cosine_similarity(model.proj(h1).float(), hp.float(), dim=-1)).mean()
+
     nxt = D.next_idx[idx]
     ok = nxt >= 0
     if ok.any():
@@ -131,6 +133,7 @@ def main():
     dev = torch.device(args.device if torch.cuda.is_available() or args.device == "cpu" else "cpu")
     table, arrs = load()
     usable = (table["skipped"] == 0).values & (table["batch_status"].fillna("nan") != "nan").values
+
     finite = np.ones(len(table), dtype=bool)
     for k in ("pre_state", "post_state"):
         for i in range(0, len(table), 8192):
@@ -192,6 +195,7 @@ def main():
             sched.step()
             for k, v in parts.items():
                 agg[k] = agg.get(k, 0.0) + v / steps_per_epoch
+
         model.eval()
         vparts, probs = {}, []
         nvb = max(math.ceil(len(va) / 512), 1)

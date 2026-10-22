@@ -1,23 +1,3 @@
-"""On-device (GPU) domain randomization for the tree geometry.
-
-The host-side DR path (`builder._dr_fast`) runs a Python forward-kinematic
-re-walk of the skeleton once per environment, so its build cost is ``O(N)`` in
-the number of worlds and dominates startup past a few tens of envs.  This module
-does the same per-world perturbation in a single Warp kernel, parallel across
-environments: one thread per world walks the (parent-before-child) segment list,
-applies that world's random geometry perturbation, and writes the finalized
-model arrays (joint rest transforms, capsule scales/transforms, masses/inertias,
-joint stiffness, colours) directly on the device.  Build then costs one kernel
-launch instead of ``N`` Python re-walks, and, because the worlds stay
-structurally identical, the per-step simulation cost is unchanged.
-
-Scope: this randomizes the WOOD (branch geometry + articulation), which is the
-part whose FK re-walk is the ``O(N)`` bottleneck.  Fruit/foliage re-homing would
-follow the same pattern and is left to the host path when enabled.
-
-Validated by the ``strength=0`` identity: with no perturbation the kernel must
-reproduce the replicated base model element-wise (see ``scripts`` test).
-"""
 from __future__ import annotations
 
 import numpy as np
@@ -28,8 +8,8 @@ from . import domainrand as _dr
 
 _ZUP = wp.constant(wp.vec3(0.0, 0.0, 1.0))
 _ZDN = wp.constant(wp.vec3(0.0, 0.0, -1.0))
-_BARK0 = wp.constant(wp.vec3(0.36, 0.24, 0.14))     # dark bark brown (trunk)
-_BARK1 = wp.constant(wp.vec3(0.55, 0.41, 0.24))     # lighter outer wood (tips)
+_BARK0 = wp.constant(wp.vec3(0.36, 0.24, 0.14))
+_BARK1 = wp.constant(wp.vec3(0.55, 0.41, 0.24))
 
 
 @wp.struct
@@ -39,15 +19,15 @@ class DRGpu:
     rad_bias_lo: float; rad_bias_hi: float
     len_sigma: float; len_lo: float; len_hi: float
     rad_sigma: float; rad_lo: float; rad_hi: float
-    ang_sigma: float                      # radians (already x strength on host)
-    droop_lo: float; droop_hi: float; droop_base: float   # droop_base in radians
+    ang_sigma: float
+    droop_lo: float; droop_hi: float; droop_base: float
     spread_lo: float; spread_hi: float
-    twist_max: float; lean_max: float     # radians (pre-strength)
+    twist_max: float; lean_max: float
     dens_lo: float; dens_hi: float
     mod_lo: float; mod_hi: float
     wood_bright_lo: float; wood_bright_hi: float
     wood_warm_lo: float; wood_warm_hi: float
-    # material / model
+
     density: float; youngs: float; beam_factor: float
     damping_ratio: float; min_stiff: float; max_stiff: float
     clearance: float
@@ -55,7 +35,6 @@ class DRGpu:
 
 @wp.func
 def _u(r: float, lo: float, hi: float, s: float):
-    """Map a uniform draw ``r`` in [0,1) onto [lo,hi] widened by ``strength``."""
     lo2 = 1.0 - (1.0 - lo) * s
     hi2 = 1.0 + (hi - 1.0) * s
     return lo2 + (hi2 - lo2) * r
@@ -63,7 +42,6 @@ def _u(r: float, lo: float, hi: float, s: float):
 
 @wp.func
 def _nclip(z: float, sigma: float, lo: float, hi: float, s: float):
-    """Map a standard-normal draw ``z`` onto ``1 + z*sigma*s`` clipped to [lo,hi]."""
     v = 1.0 + z * sigma * s
     lo2 = 1.0 - (1.0 - lo) * s
     hi2 = 1.0 + (hi - 1.0) * s
@@ -72,24 +50,24 @@ def _nclip(z: float, sigma: float, lo: float, hi: float, s: float):
 
 @wp.kernel
 def _dr_walk(
-    # --- base per-segment data (shared by all envs) ---
+
     seg_parent: wp.array(dtype=wp.int32),
     seg_order: wp.array(dtype=wp.int32),
     seg_fork: wp.array(dtype=wp.int32),
     seg_joint: wp.array(dtype=wp.int32),
-    base_qrel: wp.array(dtype=wp.quat),      # root: base world frame; child: rel rot
-    base_start: wp.array(dtype=wp.vec3),     # only the root's is used
+    base_qrel: wp.array(dtype=wp.quat),
+    base_start: wp.array(dtype=wp.vec3),
     base_len: wp.array(dtype=wp.float32),
     base_r0: wp.array(dtype=wp.float32),
     base_r1: wp.array(dtype=wp.float32),
     n_seg: wp.int32, max_order: wp.int32,
     spe: wp.int32, bpe: wp.int32, jpe: wp.int32, seed: wp.int32,
     dr: DRGpu,
-    # --- scratch (per env x per seg) ---
+
     nf: wp.array(dtype=wp.quat, ndim=2),
     ne: wp.array(dtype=wp.vec3, ndim=2),
     nl: wp.array(dtype=wp.float32, ndim=2),
-    # --- model outputs ---
+
     joint_qd_start: wp.array(dtype=wp.int32),
     joint_X_p: wp.array(dtype=wp.transform),
     shape_scale: wp.array(dtype=wp.vec3),
@@ -105,8 +83,7 @@ def _dr_walk(
     s = dr.strength
     st = wp.rand_init(seed, e)
 
-    # whole-tree draws (all randf/randn called in the kernel body so the RNG
-    # state advances; helpers take the drawn value)
+
     scale = _u(wp.randf(st), dr.scale_lo, dr.scale_hi, s)
     rad_bias = _u(wp.randf(st), dr.rad_bias_lo, dr.rad_bias_hi, s)
     droop = _u(wp.randf(st), dr.droop_lo, dr.droop_hi, s)
@@ -132,7 +109,7 @@ def _dr_walk(
         f_len = _nclip(wp.randn(st), dr.len_sigma, dr.len_lo, dr.len_hi, s)
         f_rad = _nclip(wp.randn(st), dr.rad_sigma, dr.rad_lo, dr.rad_hi, s)
         length = base_len[i] * f_len * scale
-        # small random relative bend about a random axis
+
         jq = wp.quat_identity()
         if dr.ang_sigma > 0.0:
             ang = wp.randn(st) * dr.ang_sigma
@@ -177,7 +154,7 @@ def _dr_walk(
         nl[e, i] = length
         min_z = wp.min(min_z, wp.min(start[2], end[2]))
 
-        # ---- capsule geometry / mass / inertia / colour ----
+
         R = 0.5 * (base_r0[i] + base_r1[i]) * f_rad * rad_bias * scale
         r0 = base_r0[i] * f_rad * rad_bias * scale
         L = length
@@ -201,7 +178,7 @@ def _dr_walk(
             wp.clamp(col[1] * bright, 0.0, 1.0),
             wp.clamp(col[2] * bright / warm, 0.0, 1.0))
 
-        # ---- joint rest transform + stiffness ----
+
         jnt = seg_joint[i]
         if p < 0:
             root_jnt = e * jpe + jnt
@@ -220,7 +197,7 @@ def _dr_walk(
             joint_target_kd[d0] = kd
             joint_target_kd[d0 + 1] = kd
 
-    # lift the whole tree so no segment starts below the ground clearance
+
     dz = wp.max(0.0, dr.clearance - min_z)
     joint_X_p[root_jnt] = wp.transform(
         root_pos + wp.vec3(0.0, 0.0, dz), root_rot)
@@ -239,9 +216,6 @@ def _qmul(a, b):
 
 
 def patch_device(model, base, num_envs: int, drp, config: TreeConfig):
-    """Fill the replicated ``model`` with per-env randomized wood geometry on the
-    GPU.  ``model`` must already be the base tree replicated ``num_envs`` times.
-    Returns nothing; ``model`` is modified in place."""
     dev = model.device
     segs = base.segments
     n_seg = len(segs)
@@ -257,7 +231,7 @@ def patch_device(model, base, num_envs: int, drp, config: TreeConfig):
         else:
             qrel[i] = _qmul(_qconj(frames[s.parent]), frames[i])
             fork[i] = int(order[s.parent] != order[i])
-    # seg -> joint index: root weld is joint 0, then non-root segments in order
+
     seg_joint = np.zeros(n_seg, np.int32)
     jid = 1
     n_root = 0
@@ -321,7 +295,7 @@ def patch_device(model, base, num_envs: int, drp, config: TreeConfig):
         model.joint_target_ke, model.joint_target_kd,
     ])
     wp.synchronize_device(dev)
-    # keep inverse-mass/inertia consistent with the new masses
+
     bm = model.body_mass.numpy()
     model.body_inv_mass.assign(np.where(bm > 0, 1.0 / np.maximum(bm, 1e-12), 0.0))
     bi = model.body_inertia.numpy()

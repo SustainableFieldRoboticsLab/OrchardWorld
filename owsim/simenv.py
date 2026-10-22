@@ -20,10 +20,12 @@ from treesim import builder as _builder
 from treesim.sim import Sim
 from treesim import robot as _robot
 
+
 _FRANKA = os.environ.get("OW_FRANKA_URDF") or os.path.join(
     os.path.dirname(HERE), "assets", "franka_emika_panda", "urdf", "fr3_franka_hand.urdf")
 if os.path.exists(_FRANKA):
     _robot.franka_urdf_path = lambda: _FRANKA
+
 
 GLOBAL_HW = (72, 96)
 CROP = 64
@@ -104,6 +106,7 @@ class Batch:
         self.pull_np = None
         self._index_maps()
 
+
     def _index_maps(self):
         tm, model = self.tm, self.tm.model
         ne = self.num_envs
@@ -132,6 +135,7 @@ class Batch:
         self.n_env_apples = n_ap
         self.apple_bodies = apple_b
         self.n_brk_env = len(tm.brk_joint_id) // ne if tm.brk_joint_id is not None else 0
+
         nj = model.joint_count
         jq_s = model.joint_q_start.numpy()[:nj]
         jqd_s = model.joint_qd_start.numpy()[:nj]
@@ -141,6 +145,7 @@ class Batch:
                       for x in rb["arm_dofs"]]
         self.planar_q = np.asarray(rb["planar_q"], dtype=int)
         self.planar_dof = np.asarray(rb["planar_dof"], dtype=int)
+
 
     def step(self):
         self.sim.step()
@@ -156,6 +161,7 @@ class Batch:
     def finite(self) -> bool:
         bq = self.body_q()
         return bool(np.isfinite(bq).all())
+
 
     def contact_pairs(self):
         ne = self.num_envs
@@ -173,11 +179,14 @@ class Batch:
         s0 = c.rigid_contact_shape0.numpy()[:n]
         s1 = c.rigid_contact_shape1.numpy()[:n]
         ok = (s0 >= 0) & (s1 >= 0)
+
         kk0 = np.where(s0 >= 0, self.shape_kind[np.maximum(s0, 0)], -1)
         kk1 = np.where(s1 >= 0, self.shape_kind[np.maximum(s1, 0)], -1)
         ok &= (kk0 >= 2) | (kk1 >= 2)
         if not ok.any():
             return aw, bw, aa
+
+
         idx = np.nonzero(ok)[0]
         s0, s1 = s0[idx], s1[idx]
         bq = self.body_q()

@@ -19,6 +19,7 @@ class VJEPAEncoder:
         self.device = torch.device(device)
         self.dtype = dtype if self.device.type == "cuda" else torch.float32
         if _model is None and os.environ.get("OW_VJEPA_TEST"):
+
             from transformers import VJEPA2Config, VJEPA2Model
             _model = VJEPA2Model(VJEPA2Config(
                 hidden_size=FEAT_DIM, num_hidden_layers=1, num_attention_heads=16,

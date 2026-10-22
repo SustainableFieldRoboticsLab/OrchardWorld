@@ -167,6 +167,7 @@ def main():
     else:
         run_eval(args.config, cfg, log, args.phase)
     if args.stage == "train":
+
         main_run = "full_s0" if args.phase == 1 else "vjepa_s0"
         ok = os.path.exists(os.path.join(RESULTS, "runs", main_run, "meta.json"))
         sys.exit(0 if ok else 1)

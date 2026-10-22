@@ -1,14 +1,13 @@
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export PROJECT_ROOT
-
 export SHARED="${SHARED:-$PROJECT_ROOT/.cache_shared}"
 case ":$PATH:" in *":$SHARED/bin:"*) ;; *) export PATH="$SHARED/bin:$PATH" ;; esac
 
-export UV_TORCH_BACKEND="${UV_TORCH_BACKEND:-cu129}"
+export UV_TORCH_BACKEND=cu129
 export UV_CACHE_DIR="$SHARED/uv/cache" UV_PYTHON_INSTALL_DIR="$SHARED/uv/python"
 export UV_TOOL_DIR="$SHARED/uv/tools" UV_TOOL_BIN_DIR="$SHARED/bin" UV_LINK_MODE=hardlink
 export PIP_CACHE_DIR="$SHARED/pip"
-export HF_HOME="${HF_HOME:-$SHARED/huggingface}" HF_HUB_DISABLE_TELEMETRY=1 TORCH_HOME="$SHARED/torch"
+export HF_HOME="$SHARED/huggingface" HF_HUB_DISABLE_TELEMETRY=1 TORCH_HOME="$SHARED/torch"
 export XDG_CACHE_HOME="$SHARED/cache" XDG_CONFIG_HOME="$SHARED/config" XDG_DATA_HOME="$SHARED/data"
 export MPLCONFIGDIR="$SHARED/config/matplotlib"
 export TRITON_HOME="$SHARED/triton" TRITON_CACHE_DIR="$SHARED/triton/cache"

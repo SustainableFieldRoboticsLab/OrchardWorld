@@ -1,0 +1,209 @@
+{
+ "job": {
+  "id": "e1__clean__detect_and_pick__900010",
+  "cell": "clean",
+  "controller": "detect_and_pick",
+  "seed": 900010,
+  "sigma_in": 0.0,
+  "p_drop": 0.0,
+  "sigma_servo": 0.0,
+  "foliage": 0.8,
+  "apples": 35
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 1.0,
+  "decisions": 38,
+  "targets": 32,
+  "pick_attempts": 31,
+  "executed": 31,
+  "harvested": 11.0,
+  "detached": 24.0,
+  "contacts": 26.0,
+  "damages": 13.0,
+  "skips": 7,
+  "repositions": 0,
+  "return_sum": -9.200666666666669,
+  "branches_broken_total": 123,
+  "harvest_success": 35.483870967741936,
+  "detachment": 77.41935483870968,
+  "contact_rate": 83.87096774193549,
+  "damage_rate": 41.935483870967744,
+  "actions_per_fruit": 2.8181818181818183,
+  "throughput": 0.6875,
+  "safe_return": -0.5750416666666668,
+  "skip_rate": 18.42105263157895,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 0.6875
+ },
+ "summary": {
+  "spec": {
+   "seed": 900010,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 35,
+   "light_dir": [
+    0.4625737860920266,
+    -0.14327431215441847,
+    -0.874927404929784
+   ],
+   "light_el": 61.03638519065887,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "ok",
+  "build_s": 22.14,
+  "wall_s": 615.45,
+  "sim_frames": 3600,
+  "sim_s": 60.0,
+  "fps": 5.849357837369977,
+  "env_steps": 57600,
+  "n_records": 38,
+  "per_env": [
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 9,
+    "apples_detached": 6
+   },
+   {
+    "targets": 1,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 7,
+    "apples_detached": 4
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 5,
+    "apples_detached": 1
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 6,
+    "apples_detached": 7
+   },
+   {
+    "targets": 2,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 9,
+    "apples_detached": 2
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 2,
+    "apples_detached": 4
+   },
+   {
+    "targets": 1,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 3,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 9,
+    "apples_detached": 6
+   },
+   {
+    "targets": 3,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 12,
+    "apples_detached": 5
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 3,
+    "apples_detached": 1
+   },
+   {
+    "targets": 4,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 12,
+    "apples_detached": 6
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 2,
+    "branches_broken": 15,
+    "apples_detached": 6
+   },
+   {
+    "targets": 2,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 9,
+    "apples_detached": 6
+   },
+   {
+    "targets": 2,
+    "decisions": 3,
+    "approach_fail": 0,
+    "phantom": 5,
+    "branches_broken": 12,
+    "apples_detached": 5
+   },
+   {
+    "targets": 3,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 3,
+    "apples_detached": 3
+   },
+   {
+    "targets": 2,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 6,
+    "branches_broken": 10,
+    "apples_detached": 4
+   }
+  ],
+  "bodies": 6320,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 126.73,
+   "camera": 7.72,
+   "probe": 28.5,
+   "control": 8.01
+  },
+  "noise_counts": {
+   "obs": 0,
+   "dropped": 0,
+   "grasp_attempts": 0
+  },
+  "theta_used": null
+ }
+}

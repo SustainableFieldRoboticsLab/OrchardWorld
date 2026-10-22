@@ -77,6 +77,7 @@ def main():
               flush=True)
         sys.exit(1 if fails else 0)
 
+
     import numpy as np
     from .rollout import run_batch
     from .policies import RandomPolicy

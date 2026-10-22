@@ -21,6 +21,7 @@ MAX_DECISIONS = 4
 FPS = 60.0
 CONTACT_DISP = 0.05
 
+
 R_HARVEST, R_CONTACT, R_DAMAGE, R_TIME = 1.0, 0.25, 1.0, 0.01
 
 FAIL_CODES = ["", "unreachable", "reach stalled", "no fruit at detection",
@@ -41,6 +42,8 @@ STATE_NAMES = (
 )
 STATE_DIM = len(STATE_NAMES)
 N_CONTEXT = 2 + (N_ACTIONS + 1) + 2
+
+
 ROBOT_STATE_COLS = list(range(0, 28))
 
 
@@ -88,11 +91,13 @@ class DecisionPicker(_picker.AutoPicker):
         self.n_approach_fail = 0
         self.n_phantom = 0
         self.n_decisions = 0
+
         first_shape = {}
         for s, b in enumerate(batch.shape_body):
             first_shape.setdefault(int(b), int(s))
         ssc = batch.tm.model.shape_scale.numpy()
         self._apple_r = {int(b): float(ssc[first_shape[int(b)]][0]) for b in self._apple_idx}
+
 
     def _drive_xy(self, vx, vy, w):
         self._cmd_v = 0.0
@@ -113,6 +118,7 @@ class DecisionPicker(_picker.AutoPicker):
         v = world_pt - base
         tilt = 0.15 * v[2] / max(np.linalg.norm(v[:2]), 1e-3)
         return np.array([a2[0], a2[1], tilt])
+
 
     def update(self):
         if self.done:
@@ -139,6 +145,7 @@ class DecisionPicker(_picker.AutoPicker):
         self.act["fail_reason"] = reason
         self._fingers(self.FINGER_OPEN)
         self._end_action()
+
 
     def _begin_target(self):
         ap = self._bq()[self._apple_idx, :3]
@@ -173,6 +180,7 @@ class DecisionPicker(_picker.AutoPicker):
         self._fingers(self.FINGER_OPEN)
         self._drive(0.0, 0.0)
         self._goto("SCAN")
+
 
     def _st_observe(self):
         t = self._t_state
@@ -214,6 +222,7 @@ class DecisionPicker(_picker.AutoPicker):
         H, W = depth.shape
         f = cam.percept.focal_px
         tp = self.tgt["pos"].copy()
+
         dets = cam.dets_env[e] or []
         det = None
         if dets:
@@ -307,11 +316,14 @@ class DecisionPicker(_picker.AutoPicker):
         out["occlusion"] = float(1.0 - vis.sum() / max(len(disk[disk]), 1))
         return out
 
+
     def _decide(self, obs):
         tg = self.tgt
         if tg["n_dec"] >= self.max_decisions or bool(self.apples.detached[tg["gt_glob"]]):
             self._end_target()
             return
+
+
         obs = dict(obs)
         obs["state"] = obs["state"].copy()
         obs["state"][-N_CONTEXT:] = self._context_vec()
@@ -339,6 +351,8 @@ class DecisionPicker(_picker.AutoPicker):
         if a in PICKS:
             tg["n_pick"] += 1
             side = {0: 0.0, 1: +1.0, 2: -1.0}[a]
+
+
             appr = _rot2(away, -side * PICK_ANGLE)
             self._appr = appr / np.linalg.norm(appr)
             self._goto("REACH")
@@ -349,9 +363,11 @@ class DecisionPicker(_picker.AutoPicker):
             rel = rel / (np.linalg.norm(rel) + 1e-9) * dist
             left = np.array([-away[1], away[0]])
             cand = [self._target[:2] + _rot2(rel, s * REPOS_ANGLE) for s in (+1.0, -1.0)]
+
             score = [side * float(np.dot(c - base[:2], left)) for c in cand]
             self._repos_goal = cand[int(np.argmax(score))]
             self._goto("REPOS")
+
 
     def _st_reach(self):
         a = self._appr
@@ -433,6 +449,7 @@ class DecisionPicker(_picker.AutoPicker):
         self._set_arm(self.arm_home)
         self._end_action()
 
+
     def _st_repos(self):
         t = self._t_state
         if t == 1:
@@ -458,10 +475,13 @@ class DecisionPicker(_picker.AutoPicker):
             v *= 0.30 / sp
         self._drive_xy(float(v[0]), float(v[1]), float(np.clip(2.0 * yaw_err, -0.8, 0.8)))
 
+
     def _account(self):
         B = self.B
         e = self.env
         if self.state in ("PULL", "TRANSPORT", "DROP"):
+
+
             if B.pull_np is not None and self.tgt is not None:
                 self.act["pull_max"] = max(self.act["pull_max"],
                                            float(B.pull_np[self.tgt["gt_glob"]]))
@@ -474,6 +494,7 @@ class DecisionPicker(_picker.AutoPicker):
         if B.frame % 4 == 0:
             wood = self._bq()[B.wood_bodies[self.env], :3]
             disp = np.linalg.norm(wood - self.act["wood0"], axis=1)
+
             far = np.linalg.norm(self.act["wood0"] - self.act["gt0"], axis=1) > 0.12
             if far.any():
                 self.act["wood_disp"] = max(self.act["wood_disp"], float(disp[far].max()))
@@ -501,6 +522,8 @@ class DecisionPicker(_picker.AutoPicker):
         collateral = int(newly.sum())
         broken = self.B.broken_env(e) - a["broken0"]
         contact_frames = a["arm_wood"] + a["base_wood"]
+
+
         contact = contact_frames >= 2 and a["wood_disp"] >= CONTACT_DISP
         damage = (broken > 0) or (collateral > 0)
         success = bool(a["placed"])

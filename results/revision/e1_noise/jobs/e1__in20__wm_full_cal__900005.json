@@ -1,0 +1,210 @@
+{
+ "job": {
+  "id": "e1__in20__wm_full_cal__900005",
+  "cell": "in20",
+  "controller": "wm_full_cal",
+  "seed": 900005,
+  "sigma_in": 0.02,
+  "p_drop": 0.0,
+  "sigma_servo": 0.0,
+  "foliage": 0.8,
+  "apples": 35
+ },
+ "metrics": {
+  "envs": 16,
+  "sim_minutes": 1.0,
+  "decisions": 18,
+  "targets": 17,
+  "pick_attempts": 9,
+  "executed": 9,
+  "harvested": 4.0,
+  "detached": 8.0,
+  "contacts": 1.0,
+  "damages": 0.0,
+  "skips": 9,
+  "repositions": 0,
+  "return_sum": 3.5498333333333334,
+  "branches_broken_total": 11,
+  "harvest_success": 44.44444444444444,
+  "detachment": 88.88888888888889,
+  "contact_rate": 11.11111111111111,
+  "damage_rate": 0.0,
+  "actions_per_fruit": 2.25,
+  "throughput": 0.25,
+  "safe_return": 0.22186458333333334,
+  "skip_rate": 50.0,
+  "repos_rate": 0.0,
+  "fruit_per_robot": 0.25
+ },
+ "summary": {
+  "spec": {
+   "seed": 900005,
+   "num_envs": 16,
+   "foliage": 0.8,
+   "apples": 35,
+   "light_dir": [
+    0.26082408878415153,
+    -0.5501366487523487,
+    -0.7932972093795944
+   ],
+   "light_el": 52.49471735398444,
+   "shadows": false,
+   "frames": 3600,
+   "device": "cuda",
+   "max_decisions": 4
+  },
+  "status": "ok",
+  "build_s": 11.53,
+  "wall_s": 304.27,
+  "sim_frames": 3600,
+  "sim_s": 60.0,
+  "fps": 11.831502893884268,
+  "env_steps": 57600,
+  "n_records": 18,
+  "per_env": [
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 1
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 2
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 2
+   },
+   {
+    "targets": 2,
+    "decisions": 2,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 1,
+    "decisions": 1,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 1,
+    "apples_detached": 1
+   },
+   {
+    "targets": 5,
+    "decisions": 5,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 3,
+    "apples_detached": 3
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 0,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 3,
+    "decisions": 4,
+    "approach_fail": 0,
+    "phantom": 3,
+    "branches_broken": 0,
+    "apples_detached": 0
+   },
+   {
+    "targets": 0,
+    "decisions": 0,
+    "approach_fail": 0,
+    "phantom": 1,
+    "branches_broken": 2,
+    "apples_detached": 2
+   }
+  ],
+  "bodies": 4064,
+  "envs": 16,
+  "ms_per_frame": {
+   "physics": 70.81,
+   "camera": 7.04,
+   "probe": 1.43,
+   "control": 5.23
+  },
+  "policy_latency_ms": 41.75369814038277,
+  "noise_counts": {
+   "obs": 26,
+   "dropped": 0,
+   "grasp_attempts": 0
+  },
+  "theta_used": 0.0
+ }
+}

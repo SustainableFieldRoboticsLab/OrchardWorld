@@ -1,0 +1,54 @@
+{
+ "standard": {
+  "full_s0": {
+   "detach_auroc": 0.7797645117268084,
+   "success_auroc": 0.7115981479597029,
+   "success_ap": 0.4753229147167779,
+   "contact_auroc": 0.7734617695152,
+   "damage_auroc": 0.6705662156166814,
+   "best_epoch": 9
+  },
+  "full_s1": {
+   "detach_auroc": 0.7794027103367294,
+   "success_auroc": 0.7226900376513685,
+   "success_ap": 0.4753670205324167,
+   "contact_auroc": 0.7795157461216964,
+   "damage_auroc": 0.6906471827861579,
+   "best_epoch": 11
+  },
+  "full_s2": {
+   "detach_auroc": 0.7747468977117649,
+   "success_auroc": 0.7109282249584479,
+   "success_ap": 0.4558477423655895,
+   "contact_auroc": 0.7637439243389454,
+   "damage_auroc": 0.6858716448535936,
+   "best_epoch": 11
+  }
+ },
+ "oracle": {
+  "full_s0": {
+   "detach_auroc": 0.7804912882033705,
+   "success_auroc": 0.7339600081408365,
+   "success_ap": 0.4837067881424371,
+   "contact_auroc": 0.7647606840078,
+   "damage_auroc": 0.6770075421472936,
+   "best_epoch": 9
+  },
+  "full_s1": {
+   "detach_auroc": 0.7586562569424609,
+   "success_auroc": 0.7229804789525457,
+   "success_ap": 0.46900991823050936,
+   "contact_auroc": 0.7603499066765611,
+   "damage_auroc": 0.6771503438331854,
+   "best_epoch": 13
+  },
+  "full_s2": {
+   "detach_auroc": 0.7703973467898061,
+   "success_auroc": 0.731424476781656,
+   "success_ap": 0.48283981899425804,
+   "contact_auroc": 0.7662657453185686,
+   "damage_auroc": 0.6828263642413488,
+   "best_epoch": 11
+  }
+ }
+}

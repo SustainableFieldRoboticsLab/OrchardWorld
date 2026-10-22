@@ -50,4 +50,4 @@ stage p2_train    python -m owsim.launch train --config "$CFG" --phase 2
 stage p2_offline  python -m owsim.eval_offline --device cuda
 stage p2_control  python -m owsim.launch eval --config "$CFG" --phase 2
 echo "finished $(date +%s)" > "$ST/current.txt"
-say "PHASE 2 DONE. Results: $OW_RESULTS"
+say "PHASE 2 DONE"

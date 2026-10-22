@@ -60,6 +60,7 @@ class WorldModelPolicy:
         best = max(cand, key=lambda a: scores[a])
         if self.allow_skip and scores[best] < self.theta:
             best = SKIP
+
         sc = np.full(N_ACTIONS, np.nan, dtype=np.float32)
         sc[:len(scores)] = scores
         return best, dict(p=1.0, scores=sc)
@@ -103,6 +104,7 @@ def make_policy(name, rng=None, runs_root=None, device="cuda"):
     if name == "reactive_retry":
         return ReactiveRetry()
     if name.startswith("wm_"):
+
         import os
         core = name[3:]
         cal = core.endswith("_cal")

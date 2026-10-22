@@ -23,13 +23,20 @@ VARIANTS = {
     "rgb":       dict(rgb=True, depth=False, state=False, action=True),
     "rgb_state": dict(rgb=True, depth=False, state=True, action=True),
     "no_action": dict(rgb=True, depth=True, state=True, action=False),
+
+
+    "fullcf":    dict(rgb=True, depth=True, state=True, action=True),
+
+
     "tdmpc":     dict(rgb=True, depth=True, state=True, action=True, simnorm=True, ensemble=5),
+
     "vjepa":     dict(rgb=True, depth=True, state=True, action=True, simnorm=True, ensemble=5,
                       vjepa=True),
 }
 KAPPA = 0.5
 VARIANT_LABEL = {
     "full": "World model (RGB-D + robot state)",
+    "fullcf": "World model (+ counterfactual data)",
     "rgbd": "World model (RGB-D)",
     "rgb": "World model (RGB)",
     "rgb_state": "World model (RGB + robot state)",
@@ -140,6 +147,7 @@ class WorldModel(nn.Module):
         self.proj = nn.Sequential(nn.Linear(D, D), nn.GELU(), nn.Linear(D, D))
         nn.init.normal_(self.cls, std=0.02)
         nn.init.normal_(self.type_emb, std=0.02)
+
 
     def encode(self, g, c, s, vg=None, vc=None):
         tg = self.global_tok(g) + self.type_emb[:, 0:1]
@@ -254,6 +262,8 @@ def plan_scores(model, h, gamma=0.95):
                 r2 = member_rewards(h2)
                 best = r2 if best is None else torch.maximum(best, r2)
             r = r + gamma * torch.clamp(best, min=0.0)
+
+
         out[:, a] = r.mean(0) - (KAPPA * r.std(0) if r.shape[0] > 1 else 0.0)
     return out
 

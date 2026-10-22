@@ -1,22 +1,3 @@
-"""Custom torsional spring-damper field (the paper's "crude spring abstraction").
-
-This is the *fast* deformable engine.  A maximal-coordinate base solver (XPBD)
-keeps the branch segments rigidly connected at their pivots (cheap, implicit,
-stable), and this module adds, every substep, a torsional restoring torque at
-each inter-branch joint:
-
-    tau = -Kp * rotvec(q_child_rel * q_rest^-1)  -  Kd * (w_child - w_parent)
-
-applied as an equal-and-opposite wrench on the child and parent bodies via
-``state.body_f``.  Because the stiffness lives in a Warp array we own, branch
-*breaking* is instantaneous and solver-agnostic: set ``Kp[j]=0`` (limp hinge)
-and optionally ``joint_enabled[j]=0`` (full detach) — no model recompile.
-
-Unlike the MuJoCo solver this scales to thousands of bodies in real time, at the
-cost of an explicit stiffness cap for stability (very stiff trunk joints are
-clamped; they barely move anyway).
-"""
-
 from __future__ import annotations
 
 import numpy as np
@@ -46,21 +27,21 @@ def _spring_torque(
     qp = wp.transform_get_rotation(body_q[pb])
     qc = wp.transform_get_rotation(body_q[cb])
 
-    q_rel = wp.mul(wp.quat_inverse(qp), qc)          # child in parent frame
-    dq = wp.mul(q_rel, wp.quat_inverse(q_rest[j]))   # deviation from rest
+    q_rel = wp.mul(wp.quat_inverse(qp), qc)
+    dq = wp.mul(q_rel, wp.quat_inverse(q_rest[j]))
     if dq[3] < 0.0:
-        dq = wp.quat(-dq[0], -dq[1], -dq[2], -dq[3])  # shortest arc
+        dq = wp.quat(-dq[0], -dq[1], -dq[2], -dq[3])
 
     sh = wp.sqrt(dq[0] * dq[0] + dq[1] * dq[1] + dq[2] * dq[2])
     angle = 2.0 * wp.atan2(sh, dq[3])
     axis = wp.vec3(0.0, 0.0, 0.0)
     if sh > 1.0e-7:
         axis = wp.vec3(dq[0], dq[1], dq[2]) / sh
-    rotvec = axis * angle                            # in parent frame
+    rotvec = axis * angle
 
-    tau = wp.quat_rotate(qp, -k * rotvec)            # restoring torque, world
+    tau = wp.quat_rotate(qp, -k * rotvec)
     rel_w = wp.spatial_top(body_qd[cb]) - wp.spatial_top(body_qd[pb])
-    tau = tau - kd[j] * rel_w                         # damping
+    tau = tau - kd[j] * rel_w
 
     w = wp.spatial_vector(tau, wp.vec3(0.0, 0.0, 0.0))
     wp.atomic_add(body_f, cb, w)
@@ -106,13 +87,6 @@ def _qmul(a, b):
 
 
 class MomentMeter:
-    """Measures the per-joint bending moment ``|M| = Kp*theta`` from the current
-    body poses (always valid, unlike ``joint_q`` under the MuJoCo solver).
-
-    Used by the breakers to decide rupture for *any* solver.  ``kp`` is the
-    physical stiffness, ``q_rest`` the rest relative orientation taken from the
-    finalized bodies, and ``m_max`` the per-joint rupture moment.
-    """
 
     def __init__(self, parent_body, child_body, kp, rest_body_q, device):
         self.device = device
@@ -140,12 +114,6 @@ class MomentMeter:
 
 
 class SpringField:
-    """Torsional springs for all inter-branch joints of a TreeModel.
-
-    Built from the *skeleton* (rest frames) and the per-branch beam stiffness,
-    so it is independent of the base solver.  ``max_kp`` caps stiffness for
-    explicit-integration stability.
-    """
 
     def __init__(self, tree: TreeModel, rest_body_q=None):
         self.tree = tree
@@ -154,12 +122,10 @@ class SpringField:
         skel = tree.skeleton
         phys = tree.config.physics
 
-        # Rest relative orientations are taken from the *actual* finalized body
-        # poses (so the spring sees zero deviation at t=0).  Falls back to the
-        # skeleton frames if no rest state is provided.
+
         bq = None if rest_body_q is None else np.asarray(rest_body_q)
 
-        # subtree mass per segment (for the inertia budget of the stability cap)
+
         seg_mass = {s.index: physics.segment_mass(s, phys.wood_density) for s in skel.segments}
         subtree_mass = {}
         for s in sorted(skel.segments, key=lambda s: s.depth, reverse=True):
@@ -183,8 +149,8 @@ class SpringField:
             kps.append(kp)
             kds.append(kd)
             mmax.append(physics.rupture_moment(seg, tree.config.breaking))
-            # rotational inertia of the subtree about this joint (rod-about-end
-            # for the segment + lumped subtree mass a segment-length away)
+
+
             L = max(seg.length, 1e-3)
             I = seg_mass[seg.index] * L * L / 3.0 + \
                 (subtree_mass[seg.index] - seg_mass[seg.index]) * L * L
@@ -203,9 +169,6 @@ class SpringField:
         self._moment = wp.zeros(self.n, dtype=wp.float32, device=dev)
 
     def cap_for_dt(self, dt: float, safety: float = 0.5):
-        """Clamp per-joint stiffness/damping for explicit stability at substep
-        ``dt``:  Kp <= I*(2*safety/dt)^2,  Kd <= safety*I/dt.  Thin twigs (tiny
-        inertia) are softened automatically; the trunk keeps near-physical Kp."""
         kp_max = self.inertia * (2.0 * safety / dt) ** 2
         kp = np.minimum(self.kp_phys, kp_max)
         kd_max = safety * self.inertia / dt
