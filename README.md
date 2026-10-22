@@ -1,135 +1,87 @@
-# OrchardWorld
+# OrchardWorld-Sim
 
-Physics-grounded, action-conditioned world models for apple-harvesting robots in digital orchards.
+Code, configuration, run logs and result files for the paper
 
-This repository contains the code, configurations, run logs and generated results of the study
-*OrchardWorld: Physics-Grounded Action-Conditioned World Models for Apple-Harvesting Robots in
-Digital Orchards* (R. Sapkota, Dr. K. I. Roumeliotis). All results are from simulation only, and we aim to scale up this project to real-world commercial orchard scene.
+> **OrchardWorld-Sim: Physics-Grounded Action-Conditioned World Models for Robotic Apple Harvesting in Digital Orchards**
+> R. Sapkota, K. I. Roumeliotis
 
-## What the code does
+All results are from simulation (OrchardBench on NVIDIA Newton 1.3.0, MuJoCo-Warp 3.8.1, Warp 1.14.0; Franka FR3 on a Clearpath Ridgeback).
 
-1. **Rollout generation.** OrchardBench's autonomous apple picker (NVIDIA Newton + MuJoCo-Warp)
-   gets a decision point in front of every target fruit. A randomized behaviour policy chooses one of
-   six actions: `pick-center`, `pick-left`, `pick-right`, `reposition-left`, `reposition-right`,
-   `skip`. The physically simulated outcome is logged: detachment, harvest success, branch contact,
-   damage, target visibility and execution time. 16 simulator processes (4 per GPU) each step 16
-   domain-randomized trees in one batched solve.
-2. **World model.** A 15.4 M-parameter latent-dynamics model (CNN tokenizers + Transformer encoder,
-   FiLM action-conditioned transition, outcome heads, future-depth decoder). It is trained on the
-   interventional dataset, split by tree seed. Variants: ablations (RGB, RGB-D, RGB + state, no
-   action), a TD-MPC2-style model, and one with frozen V-JEPA 2 features.
-3. **Safety-aware action selection.** Each candidate action is scored by its predicted
-   safety-weighted reward `r = harvest - 0.25 contact - damage - 0.01 tau`, and the fruit is skipped
-   below a threshold θ. θ is selected off-policy (self-normalized IPS) on validation trees, with
-   optional Platt calibration.
-4. **Closed-loop evaluation** on unseen procedural trees against these controllers:
-   - detect-and-pick;
-   - reactive retry;
-   - a selective detect-and-pick control;
-   - ablations;
-   - robustness shifts;
-   - a foliage sweep;
-   - a skip-threshold sweep;
-   - a 16-seed extension.
+## Contents
 
-## Requirements
+| Path | What it is |
+|---|---|
+| `owsim/` | data collection, dataset building, world models, planner and baseline controllers, offline and closed-loop evaluation, counterfactual (checkpoint/restore) extension |
+| `revision/` | additional experiments: action-aware baselines (E0), localization noise (E1), oracle-feature probe (E2), 3-seed ensemble (E3), 8-seed robustness (E5), within-state concordance (E6), effective sample size (ESS) |
+| `orchardbench/` | the OrchardBench simulator package (`treesim`), Apache-2.0 |
+| `assets/` | FR3 + hand URDF and meshes used by the simulator (see `assets/SOURCE.txt`, `assets/franka_emika_panda/LICENSE`) |
+| `configs/` | `full.yaml` (paper run), `smoke.yaml` (short end-to-end test) |
+| `scripts/` | stage runners (resumable) |
+| `results/` | per-job and per-run result files, summaries, run logs |
 
-- Linux x86_64, NVIDIA GPU(s) with a driver supporting CUDA 12.8 or newer. The study used 4x NVIDIA
-  H100 NVL (driver 570); the smoke test runs on a single GPU.
-- Python 3.12, [uv](https://docs.astral.sh/uv/), tmux.
-- Pinned stack: Newton 1.3.0, MuJoCo 3.8.1, MuJoCo-Warp 3.8.1, Warp 1.14.0 (CUDA 12 wheel),
-  PyTorch 2.13.0 (CUDA 12.9 build, selected through `UV_TORCH_BACKEND=cu129`).
-- Phase 2 downloads `facebook/vjepa2-vitl-fpc64-256` from Hugging Face (about 1.3 GB). No access
-  token is needed.
+Large binary files are not in this repository. They are on Zenodo: **DOI `<ZENODO-DOI>`**.
+
+## Data on Zenodo
+
+| Archive | Extract at repo root to get |
+|---|---|
+| `orchardworld_rollouts_main_and_counterfactual.tar` | `results/collect/shards/` (randomized-action rollouts, 340 tree-generation seeds) and `results/cf/shards/` (checkpoint-restored counterfactual rollouts) |
+| `orchardworld_dataset_arrays.tar` | `results/dataset/*.npy` (training arrays built from the rollouts; rebuildable with `python -m owsim.dataset`) |
+| `orchardworld_model_checkpoints.tar` | `results/runs/<variant>_s<seed>/best.pt` (trained world models: full, rgbd, rgb, rgb_state, no_action, tdmpc, vjepa; seeds 0-2) |
+
+```bash
+tar -xf <archive>.tar        # from the repository root
+shasum -a 256 -c SHA256SUMS.txt
+```
 
 ## Setup
 
+Requires Linux, NVIDIA GPUs (paper: 4x H100 NVL, driver 570, CUDA 12.x), `uv` and Python 3.12.
+
 ```bash
-git clone https://github.com/SustainableFieldRoboticsLab/OrchardWorld.git
-cd OrchardWorld
 bash setup.sh
+source env.sh
+python -m owsim.check
 ```
 
-`env.sh` keeps all caches (uv, Hugging Face, Warp kernels) under `.cache_shared/` inside the
-repository. To use another location, set `SHARED`.
+`requirements.txt` pins the physics stack (Newton 1.3.0, MuJoCo 3.8.1, MuJoCo-Warp 3.8.1, Warp 1.14.0 CUDA-12 build) and PyTorch.
 
-## Running the experiments
+## Reproducing the experiments
 
-Every stage is resumable: after an interruption, run the same command again. Long runs should be
-started inside tmux, so they keep running after you log out.
-
-| Step | Command | Time on 4x H100 |
-|---|---|---|
-| Smoke test (toy scale, writes `results_smoke/`) | `bash scripts/start_tmux.sh smoke` | ~30 min |
-| Phase 1: collect, dataset, train, offline evaluation, closed-loop control | `bash scripts/start_tmux.sh full` | ~8 h |
-| Phase 2: TD-MPC2-style and V-JEPA 2 models | `bash scripts/start_tmux.sh phase2` | ~1.1 h |
-| Calibration and selective detect-and-pick baseline | `bash scripts/start_tmux.sh extras` | ~1 h |
-| Skip-threshold sweep | `tmux new -d -s orchard_theta "bash scripts/run_theta_sweep.sh"` | ~1 h |
-| 16-seed trade-off extension | `tmux new -d -s orchard_s16 "bash scripts/run_seeds16.sh"` | ~2 h |
-
-`start_tmux.sh` opens a session `orchard` with three windows: `run`, `status` and `gpu`.
-
-- Attach with `tmux attach -t orchard`.
-- Detach with `Ctrl-b d`.
-- Show progress at any time with `bash scripts/status.sh full --once`.
-
-Configurations are in `configs/full.yaml` and `configs/smoke.yaml`. Tree seeds `100000+` are used
-for data collection (seed mod 10: 0 = test, 1 = validation, otherwise training), and seeds
-`900000+` for closed-loop evaluation. Models are trained with seeds 0, 1 and 2.
-
-The whole study took about 12.5 h of wall-clock time on four H100 GPUs (at most 50 GPU-hours).
-
-Summaries can be regenerated from the job files at any time:
+All runners are resumable: finished stages are skipped, so after an interruption run the same command again. Run them inside `tmux` or `nohup`.
 
 ```bash
-source env.sh
-python -m owsim.theta_sweep report
-python -m owsim.extras report
-python -m owsim.seeds16 report
+bash scripts/run_all.sh full            # collect -> dataset -> train -> offline -> closed loop (about 9-10 h on 4 GPUs)
+bash scripts/run_phase2.sh full         # TD-MPC2-style model and frozen V-JEPA 2 features
+bash scripts/run_extras.sh              # Platt calibration, selective detect-and-pick baseline
+bash scripts/run_theta_sweep.sh         # skip-threshold sweep (8 seeds)
+bash scripts/run_seeds16.sh             # 16 unseen seeds
+bash scripts/run_counterfactual.sh full # checkpoint/restore counterfactual extension
+bash revision/run_revision.sh all       # E0, ESS, E6, E2, E3, E1, E5
+bash scripts/run_all.sh smoke           # quick end-to-end test, writes results_smoke/
 ```
 
-## Repository layout
+To skip data generation, extract the Zenodo archives and start from the `train` stage.
+GPU physics is not bit-reproducible: expect small run-to-run differences in closed-loop metrics.
+`revision/e1_noise.py` refuses to run if `owsim/decision_picker.py` differs from the audited version (MD5 check).
 
-```
-owsim/        experiment code
-  simenv.py, decision_picker.py, rollout.py   batched simulation and the decision layer
-  collect.py, dataset.py                      randomized-action data collection and dataset
-  model.py, train.py, vjepa.py, features.py   world models and training
-  eval_offline.py, eval_control.py, policies.py  offline metrics, closed loop and controllers
-  extras.py, theta_sweep.py, seeds16.py       calibration, selective baseline, θ sweep, 16 seeds
-  launch.py, check.py, status.py, get_model.py   multi-GPU launcher and utilities
-scripts/      pipeline and tmux entry points
-configs/      full and smoke configurations
-orchardbench/ OrchardBench simulator (treesim), unmodified, Apache-2.0
-assets/       Franka FR3 description from newton-assets, Apache-2.0
-results/      results of the study (see below)
-```
+## Where the paper's numbers are
 
-## Results included
-
-| Path | Content |
+| Paper | Files |
 |---|---|
-| `results/summary.md` | offline prediction and main closed-loop comparison |
-| `results/dataset/table.csv` | all 21,943 logged decisions (action, behaviour propensity, outcomes, tree seed, split, conditions); images are not included |
-| `results/dataset/stats.json` | dataset statistics |
-| `results/offline/` | offline metrics and test-set predictions of every model and seed |
-| `results/control/jobs/` | per-episode metrics of all closed-loop jobs (main comparison, ablations, robustness, foliage sweep, phase 2) |
-| `results/control/qualitative/` | decision records with observations from the main-comparison episodes of the two world-model planners |
-| `results/extras/` | calibration fits, selective-baseline fit, closed-loop jobs and summary |
-| `results/theta_sweep/` | θ-sweep jobs and summary |
-| `results/seeds16/` | 16-seed jobs, paired statistics (`stats.json`) and summary |
-| `results/runs/<variant>_s<seed>/` | training history, normalization, selected θ and calibration of every trained model |
-| `results/logs/` | run logs |
-| `results/stages/timing.json` | wall-clock time per pipeline stage |
+| Table 2-3 (dataset, terminal events) | computed from the rollout shards (Zenodo); run metadata in `results/collect/`, `results/stages/` |
+| Table 4 (offline prediction) | `results/offline/offline_metrics.json`, `results/runs/*/stats.json`, `results/revision/e0_baselines/`, `e2_oracle/`, `e3_ensemble/` |
+| Table 5-6 (closed loop, matched throughput) | `results/report/summary.md` (8-seed summary), `results/control/jobs/`, `results/extras/`, `results/seeds16/` (`summary.md`, `stats.json`), `results/theta_sweep/` |
+| Table 7-8 (ablation, robustness) | `results/control/jobs/`, `results/revision/e5_robustness/` |
+| Table 9 (localization noise) | `results/revision/e1_noise/` |
+| Table 10, Fig. 8 (counterfactual) | `results/cf/` (`analysis.json`, `summary.md`), `results/revision/e6_within_state/`, `results/revision/ess/` |
 
-The raw image dataset (~4 GB) and the model checkpoints (~60 MB each) are not stored in this
-repository; both are regenerated by the pipeline.
+Each closed-loop job is one JSON file with its metrics; `summary.md` and `stats.json` in each folder aggregate them (bootstrap intervals over tree seeds, paired tests, Holm correction).
 
-GPU physics is not bit-reproducible. Re-running a closed-loop episode on the same seed gives
-statistically equivalent results, not identical ones: in our runs, the per-episode safe return
-varied by about ±0.1.
+## Notes
 
-## Licenses
-
-`orchardbench/` (OrchardBench, H. Munn) and `assets/franka_emika_panda/` (newton-assets) are
-distributed under the Apache License 2.0. Their license files are kept in place.
+- The scripts that typeset the paper's tables and draw its figures are not part of this repository. The numbers they used are in the per-job and per-run JSON files and the `summary.md` / `stats.json` files under `results/`.
+- Checkpoints of the counterfactual-data model (`fullcf_s0-2`, Section III-F) are not in the Zenodo archive yet; retrain with `python -m owsim.counterfactual train`.
+- Everything reported is simulation-only; the code does not control a physical robot.
+- Not included here: raw RGB-D rollouts, dataset arrays and checkpoints (Zenodo), the E2 oracle-probe dataset and models (`python -m revision.e2_oracle build` recreates them), and the counterfactual dataset arrays (`python -m owsim.counterfactual dataset` recreates them from `results/cf/shards/`).
+- No LICENSE file has been chosen for the code in `owsim/` and `revision/` yet; add one before publishing. `orchardbench/` is Apache-2.0.
