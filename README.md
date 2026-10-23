@@ -1,5 +1,7 @@
 # OrchardWorld-Sim
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23572538.svg)](https://doi.org/10.5281/zenodo.23572538)
+
 Code, configuration, run logs and result files for the paper
 
 > **OrchardWorld-Sim: Physics-Grounded Action-Conditioned World Models for Robotic Apple Harvesting in Digital Orchards**
